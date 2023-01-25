@@ -1,0 +1,10 @@
+---
+# handlers file for openssh_server
+
+- name: Restart sshd
+  become: true
+  become_user: root
+  ansible.builtin.service:
+    name: sshd
+    state: restarted
+

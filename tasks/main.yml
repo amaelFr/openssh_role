@@ -1,0 +1,4 @@
+---
+# tasks file for openssh_server
+
+- import_tasks: openssh.yml

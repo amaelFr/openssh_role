@@ -1,0 +1,173 @@
+---
+# defaults file for openssh_server
+
+
+
+
+
+# openssh_Port # port/array
+# openssh_AddressFamily
+# openssh_ListenAddress # string / obj type, value, rdomain
+# openssh_VersionAddendum
+
+# openssh_PidFile
+
+# openssh_UseDNS
+
+
+# openssh_HostCertificate
+# openssh_HostKey
+# openssh_HostKeyAlgorithms
+# openssh_HostKeyAgent
+openssh_Ciphers:
+  - chacha20-poly1305@openssh.com
+  - aes256-ctr
+  - aes256-gcm@openssh.com
+# openssh_PubkeyAcceptedAlgorithms
+# openssh_KexAlgorithms
+# openssh_FingerprintHash
+# openssh_MACs
+# openssh_ModuliFile
+# openssh_RequiredRSASize: 8192 # Not working now
+
+
+openssh_SyslogFacility: AUTHPRIV 
+# openssh_LogVerbose
+# openssh_PrintLastLog
+
+
+# openssh_Compression
+# openssh_TCPKeepAlive
+
+
+openssh_MaxStartups: 3:100:3
+# openssh_PerSourceMaxStartups: 3
+# openssh_PerSourceNetBlockSize: 32:128
+
+
+# openssh_UsePAM
+# openssh_SecurityKeyProvider
+openssh_LoginGraceTime: 30
+# openssh_StrictModes
+
+# openssh_IgnoreUserKnownHosts
+
+# openssl_XAuthLocation
+
+#### Kerberos
+# openssh_KerberosGetAFSToken
+# openssh_KerberosOrLocalPasswd
+# openssh_KerberosTicketCleanup
+# openssh_GSSAPICleanupCredentials
+# openssh_GSSAPIStrictAcceptorCheck
+
+
+# openssl_Subsystem
+
+
+# openssl_PrintMotd
+# openssl_PermitUserEnvironment
+
+
+openssh_global:
+
+  features:
+    - X11Forwarding
+    - AgentForwarding
+ 
+  # Include
+ 
+ 
+  ######## Connection ########
+  # LogLevel
+  RekeyLimit:
+    size: 512M
+    time: 10m
+  # IPQoS
+  # ClientAliveInterval 
+  # ClientAliveCountMax
+  # Banner
+
+  ####### Session established ########
+  MasSessions: 3 
+  # PermitTTY
+  # PermitUserRC
+  # ForceCommand
+  # SetEnv
+  # AcceptEnv
+  # ExposeAuthInfo
+  # ChrootDirectory 
+  # RDomain
+
+  #### Forwarding
+  DisableForwarding: true
+  # GatewayPorts
+  AllowAgentForwarding: false
+  AllowStreamLocalForwarding: false
+  AllowTcpForwarding: false
+  PermitListen: false
+  PermitOpen: false
+  PermitTunnel: false
+  # StreamLocalBindMask
+  # StreamLocalBindUnlink
+  #### Remote desktop 
+  # X11Forwarding
+  # X11DisplayOffset
+  # X11UseLocalhost
+
+
+  ######## Authentification ########
+  MaxAuthTries: 3
+  PermitRootLogin: false
+  AuthenticationMethods:
+    - publickey
+  # PubkeyAuthentication
+  PasswordAuthentication: false
+  # KbdInteractiveAuthentication
+  # PermitEmptyPasswords
+
+  #### AuthKey specific
+  # PubkeyAuthentication
+  # PubkeyAuthOptions
+  # AuthorizedKeysFile
+  # RevokedKeys
+  # AuthorizedKeysCommand
+  # AuthorizedKeysCommandUser
+  #### Auth certificate specific
+  # AuthorizedPrincipalsFile
+  # CASignatureAlgorithms
+  # TrustedUserCAKeys
+  # AuthorizedPrincipalsCommand
+  # AuthorizedPrincipalsCommandUser
+
+  #### Kerberos
+  # KerberosAuthentication
+  # GSSAPIAuthentication
+  
+  #### Host auth with impersonate for all / matches
+  # HostbasedAuthentication
+  # IgnoreRhosts
+  # HostbasedAcceptedAlgorithms
+  # HostbasedUsesNameFromPacketOnly
+ 
+
+  ######## User/Group restrictions ########
+  # DenyUsers
+  # DenyGroups
+  # AllowUsers
+  # AllowGroups
+
+
+# openssh_Match:
+#   - to_match
+#     - type: # User, Group, Host, Address
+#       value: array
+#     # all parameters from global
+
+# openssh_Match:
+#   - to_match:
+#       - type: User
+#         value:
+#           - x1
+#           - g565534
+#     PermitRootLogin: true

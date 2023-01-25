@@ -1,0 +1,305 @@
+
+{%- macro global_match_conf_gen(openssh_sub_conf) -%}
+
+    {% if openssh_sub_conf.Include is defined -%}
+        {% for Include in openssh_sub_conf.Include -%}
+            Include {{ Include }}
+        {% endfor -%}
+    {% endif -%}
+
+
+######## Connection ########
+    {% if openssh_sub_conf.LogLevel is defined -%}
+        LogLevel {{ openssh_sub_conf.LogLevel }}
+    {% endif -%}
+
+    {% if openssh_sub_conf.RekeyLimit is defined -%}
+        {% if openssh_sub_conf.RekeyLimit is mapping -%}
+            RekeyLimit {{ openssh_sub_conf.RekeyLimit.size }} {{ openssh_sub_conf.RekeyLimit.time }}
+        {% else -%}
+            RekeyLimit {{ openssh_sub_conf.RekeyLimit }}
+        {% endif -%}
+    {% endif -%}
+
+    {% if openssh_sub_conf.IPQoS is defined -%}
+        IPQoS {{ openssh_sub_conf.IPQoS }}
+    {% endif -%}
+
+    {% if openssh_sub_conf.ClientAliveInterval is defined -%}
+        ClientAliveInterval {{ openssh_sub_conf.ClientAliveInterval }}
+    {% endif -%}
+
+    {% if openssh_sub_conf.ClientAliveCountMax is defined -%}
+        ClientAliveCountMax {{ openssh_sub_conf.ClientAliveCountMax }}
+    {% endif -%}
+
+    {% if openssh_sub_conf.Banner is defined -%}
+        Banner {{ openssh_sub_conf.Banner if openssh_sub_conf.Banner else 'none' }}
+    {% endif -%}
+
+
+####### Session established ########
+    {% if openssh_sub_conf.MaxSessions is defined -%}
+        MaxSessions {{ openssh_sub_conf.MaxSessions }}
+    {% endif -%}
+
+    {% if openssh_sub_conf.PermitTTY is defined -%}
+        PermitTTY {{ 'yes' if openssh_sub_conf.PermitTTY else 'no' }}
+    {% endif -%}
+
+    {% if openssh_sub_conf.PermitUserRC is defined -%}
+        PermitUserRC {{ 'yes' if openssh_sub_conf.PermitUserRC else 'no' }}
+    {% endif -%}
+
+    {% if openssh_sub_conf.ForceCommand is defined -%}
+        ForceCommand {{ openssh_sub_conf.ForceCommand if openssh_sub_conf.ForceCommand else 'none' }}
+    {% endif -%}
+
+    {% if openssh_sub_conf.SetEnv is defined -%}
+        SetEnv{% for SetEnv in openssh_sub_conf.SetEnv %} "{%
+        if SetEnv is mapping %}
+            {{ SetEnv.name }}={{ SetEnv.value }}
+        {% else %}
+            {{ SetEnv }}
+        {% endif %}"{% endfor %}
+    {% endif -%}
+
+    {% if openssh_sub_conf.AcceptEnv is defined -%}
+        AcceptEnv {{ openssh_sub_conf.AcceptEnv|join(' ') }}
+    {% endif -%}
+
+    {% if openssh_sub_conf.ExposeAuthInfo is defined -%}
+        ExposeAuthInfo {{ 'yes' if openssh_sub_conf.ExposeAuthInfo else 'no' }}
+    {% endif -%}
+
+    {% if openssh_sub_conf.ChrootDirectory is defined -%}
+        VersionAddendum {{ oopenssh_sub_conf.ChrootDirectory if oopenssh_sub_conf.ChrootDirectory else 'none' }}
+    {% endif -%}
+
+    {% if openssh_sub_conf.RDomain is defined -%}
+        RDomain {{ openssh_sub_conf.RDomain }}
+    {% endif -%}
+
+
+#### Forwarding
+    {% if openssh_sub_conf.DisableForwarding is defined -%}
+        DisableForwarding {{ 'yes' if openssh_sub_conf.DisableForwarding else 'no' }}
+    {% endif -%}
+
+    {% if openssh_sub_conf.GatewayPorts is defined -%}
+        {% if openssh_sub_conf.GatewayPorts is boolean -%}
+            GatewayPorts {{ 'yes' if openssh_sub_conf.GatewayPorts else 'no' }}
+        {% else -%}
+            GatewayPorts {{ openssh_sub_conf.GatewayPorts }}
+        {% endif -%}
+    {% endif -%}
+
+    {% if openssh_sub_conf.AllowAgentForwarding is defined -%}
+        AllowAgentForwarding {{ 'yes' if openssh_sub_conf.AllowAgentForwarding else 'no' }}
+    {% endif -%}
+
+    {% if openssh_sub_conf.AllowStreamLocalForwarding is defined -%}
+        AllowStreamLocalForwarding {{ 'yes' if openssh_sub_conf.AllowStreamLocalForwarding else 'no' }}
+    {% endif -%}
+
+    {% if openssh_sub_conf.AllowTcpForwarding is defined -%}
+        AllowTcpForwarding {{ 'yes' if openssh_sub_conf.AllowTcpForwarding else 'no' }}
+    {% endif -%}
+
+    {% if openssh_sub_conf.PermitListen is defined -%}
+        {% if openssh_sub_conf.PermitListen is boolean -%}
+            PermitListen {{ 'any' if openssh_sub_conf.PermitListen else 'none' }}
+        {% else -%}
+            PermitListen {{ openssh_sub_conf.PermitListen|join(' ') }}
+        {% endif -%}
+    {% endif -%}
+
+    {% if openssh_sub_conf.PermitOpen is defined -%}
+        {% if openssh_sub_conf.PermitOpen is boolean -%}
+            PermitOpen {{ 'any' if openssh_sub_conf.PermitOpen else 'none' }}
+        {% else -%}
+            PermitOpen {{ openssh_sub_conf.PermitOpen|join(' ') }}
+        {% endif -%}
+    {% endif -%}
+
+    {% if openssh_sub_conf.PermitTunnel is defined -%}
+        {% if openssh_sub_conf.PermitTunnel is boolean -%}
+            PermitTunnel {{ 'yes' if openssh_sub_conf.PermitTunnel else 'no' }}
+        {% else -%}
+            PermitTunnel {{ openssh_sub_conf.PermitTunnel }}
+        {% endif -%}
+    {% endif -%}
+
+    {% if openssh_sub_conf.StreamLocalBindMask is defined -%}
+        StreamLocalBindMask {{ openssh_sub_conf.StreamLocalBindMask }}
+    {% endif -%}
+
+    {% if openssh_sub_conf.StreamLocalBindUnlink is defined -%}
+        StreamLocalBindUnlink {{ 'yes' if openssh_sub_conf.StreamLocalBindUnlink else 'no' }}
+    {% endif -%}
+
+#### Remote desktop
+    {% if openssh_sub_conf.X11Forwarding is defined -%}
+        X11Forwarding {{ 'yes' if openssh_sub_conf.X11Forwarding else 'no' }}
+    {% endif -%}
+
+    {% if openssh_sub_conf.X11DisplayOffset is defined -%}
+        X11DisplayOffset {{ openssh_sub_conf.X11DisplayOffset }}
+    {% endif -%}
+
+    {% if openssh_sub_conf.X11UseLocalhost is defined -%}
+        X11UseLocalhost {{ 'yes' if openssh_sub_conf.X11UseLocalhost else 'no' }}
+    {% endif -%}
+
+######## Authentification ########
+
+    {% if openssh_sub_conf.MaxAuthTries is defined -%}
+        MaxAuthTries {{ openssh_sub_conf.MaxAuthTries }}
+    {% endif -%}
+
+    {% if openssh_sub_conf.PermitRootLogin is defined -%}
+        {% if openssh_sub_conf.PermitRootLogin is boolean -%}
+            PermitRootLogin {{ 'yes' if openssh_sub_conf.PermitRootLogin else 'no' }}
+        {% else -%}
+            PermitRootLogin {{ openssh_sub_conf.PermitRootLogin }}
+        {% endif -%}
+    {% endif -%}
+
+    {% if openssh_sub_conf.AuthenticationMethods is defined -%}
+        {% if openssh_sub_conf.AuthenticationMethods is mapping -%}
+            AuthenticationMethods{% for AuthenticationMethods in openssh_sub_conf.AuthenticationMethods %} {{openssh_sub_conf.AuthenticationMethods[AuthenticationMethods]|join(',') }}{% endfor %}
+        {% else -%}
+            AuthenticationMethods {{ openssh_sub_conf.AuthenticationMethods|join(',') }}
+        {% endif -%}
+    {% endif -%}
+
+    {% if openssh_sub_conf.PasswordAuthentication is defined -%}
+        PasswordAuthentication {{ 'yes' if openssh_sub_conf.PasswordAuthentication else 'no' }}
+    {% endif -%}
+
+    {% if openssh_sub_conf.KbdInteractiveAuthentication is defined -%}
+        KbdInteractiveAuthentication {{ 'yes' if openssh_sub_conf.KbdInteractiveAuthentication else 'no' }}
+    {% endif -%}
+attaque informatique US vols
+    {% if openssh_sub_conf.PermitEmptyPasswords is defined -%}
+        PermitEmptyPasswords {{ 'yes' if openssh_sub_conf.PermitEmptyPasswords else 'no' }}
+    {% endif -%}
+
+
+#### AuthKey specific
+    {% if openssh_sub_conf.PubkeyAuthentication is defined -%}
+        PubkeyAuthentication {{ 'yes' if openssh_sub_conf.PubkeyAuthentication else 'no' }}
+    {% endif -%}
+
+    {% if openssh_sub_conf.PubkeyAuthOptions is defined -%}
+        PubkeyAuthOptions {{ openssh_sub_conf.PubkeyAuthOptions if openssh_sub_conf.PubkeyAuthOptions else 'none' }}
+    {% endif -%}
+
+    {% if openssh_sub_conf.AuthorizedKeysFile is defined -%}
+        AuthorizedKeysFile {{ openssh_sub_conf.AuthorizedKeysFile|join(' ') }}
+    {% endif -%}
+
+    {% if openssh_sub_conf.RevokedKeys is defined -%}
+        RevokedKeys {{ openssh_sub_conf.RevokedKeys if openssh_sub_conf.RevokedKeys else 'none' }}
+    {% endif -%}
+
+    {% if openssh_sub_conf.AuthorizedKeysCommand is defined -%}
+        AuthorizedKeysCommand {{ openssh_sub_conf.AuthorizedKeysCommand }}
+    {% endif -%}
+
+    {% if openssh_sub_conf.AuthorizedKeysCommandUser is defined -%}
+        AuthorizedKeysCommandUser {{ openssh_sub_conf.AuthorizedKeysCommandUser }}
+    {% endif -%}
+
+    {% if openssh_sub_conf.AuthorizedPrincipalsFile is defined -%}
+        AuthorizedPrincipalsFile {{ openssh_sub_conf.AuthorizedPrincipalsFile }}
+    {% endif -%}
+
+    {% if openssh_sub_conf.CASignatureAlgorithms is defined -%}
+        {% if openssh_sub_conf.CASignatureAlgorithms is mapping -%}
+            CASignatureAlgorithms {{ ( '+' if openssh_sub_conf.CASignatureAlgorithms.append else '-' ) if openssh_sub_conf.CASignatureAlgorithms.append is defined }}{{ openssh_sub_conf.CASignatureAlgorithms.algorithms|join(',') }}
+        {% else -%}
+            CASignatureAlgorithms {{ openssh_sub_conf.CASignatureAlgorithms|join(',') }}
+        {% endif -%}
+    {% endif -%}
+
+    {% if openssh_sub_conf.TrustedUserCAKeys is defined -%}
+        {% if openssh_sub_conf.TrustedUserCAKeys is false -%}
+            TrustedUserCAKeys none
+        {% else -%}
+            {% for TrustedUserCAKeys in openssh_sub_conf.TrustedUserCAKeys -%}
+                TrustedUserCAKeys {{ TrustedUserCAKeys }}
+            {% endfor -%}
+        {% endif -%}
+    {% endif -%}
+
+    {% if openssh_sub_conf.AuthorizedPrincipalsCommand is defined -%}
+        AuthorizedPrincipalsCommand {{ openssh_sub_conf.AuthorizedPrincipalsCommand }}
+    {% endif -%}
+
+    {% if openssh_sub_conf.AuthorizedPrincipalsCommandUser is defined -%}
+        AuthorizedPrincipalsCommandUser {{ openssh_sub_conf.AuthorizedPrincipalsCommandUser }}
+    {% endif -%}
+
+#### Kerberos
+    {% if openssh_sub_conf.KerberosAuthentication is defined -%}
+        KerberosAuthentication {{ 'yes' if openssh_sub_conf.KerberosAuthentication else 'no' }}
+    {% endif -%}
+
+    {% if openssh_sub_conf.GSSAPIAuthentication is defined -%}
+        GSSAPIAuthentication {{ 'yes' if openssh_sub_conf.GSSAPIAuthentication else 'no' }}
+    {% endif -%}
+
+#### Host auth with impersonate for all / matches
+    {% if openssh_sub_conf.HostbasedAuthentication is defined -%}
+        HostbasedAuthentication {{ 'yes' if openssh_sub_conf.HostbasedAuthentication else 'no' }}
+    {% endif -%}
+
+    {% if openssh_sub_conf.IgnoreRhosts is defined -%}
+        {% if openssh_sub_conf.IgnoreRhosts is boolean -%}
+            IgnoreRhosts {{ 'yes' if openssh_sub_conf.IgnoreRhosts else 'no' }}
+        {% else -%}
+            IgnoreRhosts {{ openssh_sub_conf.IgnoreRhosts }}
+        {% endif -%}
+    {% endif -%}
+
+    {% if openssh_sub_conf.HostbasedAcceptedAlgorithms is defined -%}
+        {% if openssh_sub_conf.HostbasedAcceptedAlgorithms is mapping -%}
+            HostbasedAcceptedAlgorithms {{ ( '+' if openssh_sub_conf.HostbasedAcceptedAlgorithms.append else '-' ) if openssh_sub_conf.HostbasedAcceptedAlgorithms.append is defined }}{{ openssh_sub_conf.HostbasedAcceptedAlgorithms.algorithms|join(',') }}
+        {% else -%}
+            HostbasedAcceptedAlgorithms {{ openssh_sub_conf.HostbasedAcceptedAlgorithms|join(',') }}
+        {% endif -%}
+    {% endif -%}
+
+    {% if openssh_sub_conf.HostbasedUsesNameFromPacketOnly is defined -%}
+        HostbasedUsesNameFromPacketOnly {{ 'yes' if openssh_sub_conf.HostbasedUsesNameFromPacketOnly else 'no' }}
+    {% endif -%}
+
+    {% if openssh_sub_conf.DenyUsers is defined -%}
+        DenyUsers {{ openssh_sub_conf.DenyUsers|join(' ') }}
+    {% endif -%}
+
+    {% if openssh_sub_conf.DenyGroups is defined -%}
+        DenyGroups {{ openssh_sub_conf.DenyGroups|join(' ') }}
+    {% endif -%}
+
+    {% if openssh_sub_conf.AllowUsers is defined -%}
+        AllowUsers {{ openssh_sub_conf.AllowUsers|join(' ') }}
+    {% endif -%}
+
+    {% if openssh_sub_conf.AllowGroups is defined -%}
+        AllowGroups {{ openssh_sub_conf.AllowGroups|join(' ') }}
+    {% endif -%}
+{%- endmacro -%}
+
+{{ global_match_conf_gen(openssh_global) }}
+
+{%- if openssh_Match is defined %}
+    {% for match in openssh_Match %}
+
+
+Match{% for to_match in match.to_match %} {{ to_match.type }} {{ to_match.value|join(',') }}{% endfor %}
+
+    {{ global_match_conf_gen(match)|indent(4) -}}
+    {% endfor %}
+{%- endif %}

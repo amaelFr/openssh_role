@@ -1,0 +1,27 @@
+---
+##### To apply to match and global
+- name: X11 Forwarding
+  when: "'X11' in features or 'X11Forwarding' in features"
+  set_fact:
+    openssh_global: "{{ openssh_global| combine({ 'DisableForwarding': false, 'X11Forwarding': true }) }}"
+
+- name: Agent Forwarding
+  when: "'Agent' in features in features or 'AgentForwarding' in features"
+  set_fact:
+    openssh_global: "{{ openssh_global| combine({ 'DisableForwarding': false, 'AllowAgentForwarding': true }) }}"
+
+
+- name: Configure openssh
+  template:
+    src: openssh_config.j2
+    # src: openssh_global_match_config.j2
+    # dest: /etc/ssh/sshd_config
+    dest: ~/sshd_config
+    # owner: root
+    # group: root
+    mode: '0600'
+    # validate: sshd -t -f %s
+    backup: yes
+    lstrip_blocks: yes
+  # notify:
+  #   - Restart openssh

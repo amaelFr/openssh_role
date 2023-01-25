@@ -1,0 +1,231 @@
+{{ ansible_managed | comment }}
+
+
+
+{% if openssh_Port is defined %}
+    {% for Port in openssh_Port -%}
+        Port {{ Port }}
+    {% endfor -%}
+{% endif %}
+
+{% if openssh_AddressFamily is defined -%}
+    AddressFamily {{ openssh_AddressFamily }}
+{% endif -%}
+
+
+{% if openssh_ListenAddress is defined %}
+    {% for ListenAddress in openssh_ListenAddress %}
+        {% if ListenAddress is mapping -%}
+            ListenAddress {{ ListenAddress.value }}{% if ListenAddress.rdomain %} {{ ListenAddress.rdomain }}{% endif %}
+        {% else -%}
+            ListenAddress {{ ListenAddress -}}
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+
+{% if openssh_VersionAddendum is defined -%}
+    VersionAddendum {{ openssh_VersionAddendum if openssh_VersionAddendum else 'none' }}
+{% endif -%}
+
+{% if openssh_PidFile is defined -%}
+    PidFile {{ openssh_PidFile }}
+{% endif -%}
+
+{% if openssh_UseDNS is defined -%}
+    UseDNS {{ 'yes' if openssh_UseDNS else 'no' }}
+{% endif -%}
+
+
+
+{% if openssh_HostCertificate is defined %}
+    {% for HostCertificate in openssh_HostCertificate -%}
+        HostCertificate {{ HostCertificate }}
+    {% endfor -%}
+{% endif %}
+
+
+
+
+{% if openssh_HostKey is defined %}
+    {% for HostKey in openssh_HostKey -%}
+        HostKey {{ HostKey }}
+    {% endfor -%}
+{% endif %}
+
+{% if openssh_HostKeyAlgorithms is defined -%}
+    HostKeyAlgorithms {{ openssh_HostKeyAlgorithms|join(',') }}
+{% endif -%}
+
+{% if openssh_HostKeyAgent is defined -%}
+    HostKeyAgent {{ openssh_HostKeyAgent }}
+{% endif -%}
+
+{% if openssh_Ciphers is defined %}
+    {% if openssh_Ciphers is mapping -%}
+        Ciphers {{ ( '+' if openssh_Ciphers.append else '-' ) if openssh_Ciphers.append is defined }}{{ openssh_Ciphers.algorithms|join(',') }}
+    {% else -%}
+        Ciphers {{ openssh_Ciphers|join(',') }}
+    {% endif -%}
+{% endif %}
+
+{% if openssh_PubkeyAcceptedAlgorithms is defined %}
+    {% if openssh_PubkeyAcceptedAlgorithms is mapping -%}
+        PubkeyAcceptedAlgorithms {{ ( '+' if openssh_PubkeyAcceptedAlgorithms.append else '-' ) if openssh_PubkeyAcceptedAlgorithms.append is defined }}{{ openssh_PubkeyAcceptedAlgorithms.algorithms|join(',') }}
+    {% else -%}
+        PubkeyAcceptedAlgorithms {{ openssh_PubkeyAcceptedAlgorithms|join(',') }}
+    {% endif -%}
+{% endif %}
+
+{% if openssh_KexAlgorithms is defined %}
+    {% if openssh_KexAlgorithms is mapping -%}
+        KexAlgorithms {{ ( '+' if openssh_KexAlgorithms.append else '-' ) if openssh_KexAlgorithms.append is defined }}{{ openssh_KexAlgorithms.algorithms|join(',') }}
+    {% else -%}
+        KexAlgorithms {{ openssh_KexAlgorithms|join(',') }}
+    {% endif -%}
+{% endif %}
+
+{% if openssh_FingerprintHash is defined -%}
+    FingerprintHash {{ openssh_FingerprintHash }}
+{% endif -%}
+
+{% if openssh_MACs is defined %}
+    {% if openssh_MACs is mapping -%}
+        MACs {{ ( '+' if openssh_MACs.append else '-' ) if openssh_MACs.append is defined }}{{ openssh_MACs.algorithms|join(',') }}
+    {% else -%}
+        MACs {{ openssh_MACs|join(',') }}
+    {% endif -%}
+{% endif %}
+
+{% if openssh_ModuliFile is defined -%}
+    ModuliFile {{ openssh_ModuliFile }}
+{% endif -%}
+
+{% if openssh_RequiredRSASize is defined -%}
+    RequiredRSASize {{ openssh_RequiredRSASize }}
+{% endif -%}
+
+
+
+
+{% if openssh_SyslogFacility is defined -%}
+    SyslogFacility {{ openssh_SyslogFacility }}
+{% endif -%}
+
+{% if openssh_LogVerbose is defined -%}
+    LogVerbose {{ openssh_LogVerbose|join(',') }}
+{% endif -%}
+
+{% if openssh_PrintLastLog is defined -%}
+    PrintLastLog {{ 'yes' if openssh_PrintLastLog else 'no' }}
+{% endif -%}
+
+
+
+{% if openssh_Compression is defined -%}
+    Compression {{ 'yes' if openssh_Compression else 'no' }}
+{% endif -%}
+
+{% if openssh_TCPKeepAlive is defined -%}
+    TCPKeepAlive {{ 'yes' if openssh_TCPKeepAlive else 'no' }}
+{% endif -%}
+
+
+
+{% if openssh_MaxStartups is defined %}
+    {% if openssh_MaxStartups is mapping -%}
+        MaxStartups {{ openssh_MaxStartups.max_conn_b_random }}:{{ openssh_MaxStartups.prop_drop }}:{{ openssh_MaxStartups.max_conn }}
+    {% else -%}
+        MaxStartups {{ openssh_MaxStartups }}
+    {% endif -%}
+{% endif %}
+
+{% if openssh_PerSourceMaxStartups is defined -%}
+    PerSourceMaxStartups {{ openssh_PerSourceMaxStartups }}
+{% endif -%}
+
+{% if openssh_PerSourceNetBlockSize is defined %}
+    {% if openssh_PerSourceNetBlockSize is mapping -%}
+        PerSourceNetBlockSize {{ openssh_PerSourceNetBlockSize.v4 }}:{{ openssh_PerSourceNetBlockSize.v6 }}
+    {% else -%}
+        PerSourceNetBlockSize {{ openssh_PerSourceNetBlockSize }}
+    {% endif -%}
+{% endif %}
+
+
+
+{% if openssh_UsePAM is defined -%}
+    UsePAM {{ 'yes' if openssh_UsePAM else 'no' }}
+{% endif -%}
+
+{% if openssh_SecurityKeyProvider is defined -%}
+SecurityKeyProvider {{ openssh_SecurityKeyProvider }}
+{% endif -%}
+
+{% if openssh_LoginGraceTime is defined -%}
+    LoginGraceTime {{ openssh_LoginGraceTime }}
+{% endif -%}
+
+{% if openssh_StrictModes is defined -%}
+    StrictModes {{ 'yes' if openssh_StrictModes else 'no' }}
+{% endif -%}
+
+
+
+{% if openssh_IgnoreUserKnownHosts is defined -%}
+    IgnoreUserKnownHosts {{ 'yes' if openssh_IgnoreUserKnownHosts else 'no' }}
+{% endif -%}
+
+{% if openssh_XAuthLocation is defined -%}
+    XAuthLocation {{ openssh_XAuthLocation }}
+{% endif %}
+
+#### Kerberos
+{% if openssh_KerberosGetAFSToken is defined -%}
+    KerberosGetAFSToken {{ 'yes' if openssh_KerberosGetAFSToken else 'no' }}
+{% endif -%}
+
+{% if openssh_KerberosOrLocalPasswd is defined -%}
+    KerberosOrLocalPasswd {{ 'yes' if openssh_KerberosOrLocalPasswd else 'no' }}
+{% endif -%}
+
+{% if openssh_KerberosTicketCleanup is defined -%}
+    KerberosTicketCleanup {{ 'yes' if openssh_KerberosTicketCleanup else 'no' }}
+{% endif -%}
+
+{% if openssh_GSSAPICleanupCredentials is defined -%}
+    GSSAPICleanupCredentials {{ 'yes' if openssh_GSSAPICleanupCredentials else 'no' }}
+{% endif -%}
+
+{% if openssh_GSSAPIStrictAcceptorCheck is defined -%}
+    GSSAPIStrictAcceptorCheck {{ 'yes' if openssh_GSSAPIStrictAcceptorCheck else 'no' }}
+{% endif -%}
+
+
+
+{% if openssh_Subsystem is defined %}
+    {% for Subsystem in openssh_Subsystem %}
+        {% if Subsystem is mapping -%}
+            Subsystem {{ Subsystem.name }} {{ Subsystem.path }}
+        {% else -%}
+            Subsystem {{ Subsystem }}
+        {% endif -%}
+    {% endfor %}
+{% endif %}
+
+
+
+{% if openssh_PrintMotd is defined -%}
+    PrintMotd {{ 'yes' if openssh_PrintMotd else 'no' }}
+{% endif -%}
+
+{% if openssh_PermitUserEnvironment is defined %}
+    {% if openssh_PermitUserEnvironment is boolean -%}
+        PermitUserEnvironment {{ 'yes' if openssh_PermitUserEnvironment else 'no' }}
+    {% else -%}
+        PermitUserEnvironment {{ openssh_PermitUserEnvironment|join(',') }}
+    {% endif -%}
+{% endif %}
+
+
+{% include './templates/openssh_global_match_config.j2' -%}
