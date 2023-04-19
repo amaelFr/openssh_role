@@ -16,13 +16,13 @@
   template:
     src: openssh_config.j2
     # src: openssh_global_match_config.j2
-    # dest: /etc/ssh/sshd_config
-    dest: ~/sshd_config
+    dest: /etc/ssh/sshd_config
+    # dest: ~/sshd_config
     owner: root
     group: root
     mode: '0600'
-    # validate: /usr/sbin/sshd -t -f %s
+    validate: /usr/sbin/sshd -t -f %s
     backup: yes
     lstrip_blocks: yes
-  # notify:
-  #   - Restart openssh
+  notify:
+    - Restart sshd
