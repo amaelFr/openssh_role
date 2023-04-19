@@ -162,10 +162,16 @@
     {% endif -%}
 
     {% if openssh_sub_conf.AuthenticationMethods is defined -%}
-        {% if openssh_sub_conf.AuthenticationMethods is mapping -%}
-            AuthenticationMethods{% for AuthenticationMethods in openssh_sub_conf.AuthenticationMethods %} {{openssh_sub_conf.AuthenticationMethods[AuthenticationMethods]|join(',') }}{% endfor %}
+        {% if openssh_sub_conf.AuthenticationMethods -%}
+                AuthenticationMethods{% 
+                    for i in openssh_sub_conf.AuthenticationMethods %} {{
+                            i
+                        if i is string else
+                            i|join(',')
+                    }}{% endfor %}
+
         {% else -%}
-            AuthenticationMethods {{ openssh_sub_conf.AuthenticationMethods|join(',') }}
+            AuthenticationMethods none
         {% endif -%}
     {% endif -%}
 

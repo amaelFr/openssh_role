@@ -21,7 +21,7 @@ Example Playbook
 
     - hosts: servers
       roles:
-        - role: username.rolename
+        - role: amaelFr.openssh
           openssh_global:
             PasswordAuthentication: true
             PermitRootLogin: true

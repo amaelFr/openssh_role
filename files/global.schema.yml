@@ -100,16 +100,20 @@ properties:
     - type: boolean
   AuthenticationMethods:
     anyOf:
+    - type: boolean
+      enum: [false]
     - type: array
       items:
         type: string
         match: "[^,]"
-    - type: object
+    - type: array
       items:
-        type: array
-        items:
-          type: string
+        - type: string
           match: "[^,]"
+        - type: array
+          items:
+            type: string
+            match: "[^,]"
   PubkeyAuthentication: { type: boolean }
   PasswordAuthentication: { type: boolean }
   KbdInteractiveAuthentication: { type: boolean }

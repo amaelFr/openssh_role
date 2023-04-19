@@ -24,7 +24,7 @@
     openssh_global_override: "{{ openssh_default_global|combine(openssh_global|d({})) }}"
 
 
-
+######## TODO add feature permit login password, and for match user
 # - name: X11 Forwarding
 #   when: "'X11' in features or 'X11Forwarding' in features"
 #   set_fact:
@@ -39,8 +39,8 @@
 - name: Configure openssh
   become: true
   template:
-    src: openssh_config.j2
-    # src: openssh_global_match_config.j2
+    # src: openssh_config.j2
+    src: openssh_global_match_config.j2
     dest: /etc/ssh/sshd_config
     # dest: ~/sshd_config
     owner: root
