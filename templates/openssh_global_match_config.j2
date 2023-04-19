@@ -180,7 +180,6 @@
     {% if openssh_sub_conf.KbdInteractiveAuthentication is defined -%}
         KbdInteractiveAuthentication {{ 'yes' if openssh_sub_conf.KbdInteractiveAuthentication else 'no' }}
     {% endif -%}
-attaque informatique US vols
     {% if openssh_sub_conf.PermitEmptyPasswords is defined -%}
         PermitEmptyPasswords {{ 'yes' if openssh_sub_conf.PermitEmptyPasswords else 'no' }}
     {% endif -%}

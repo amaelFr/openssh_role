@@ -171,3 +171,5 @@ openssh_global:
 #           - x1
 #           - g565534
 #     PermitRootLogin: true
+
+openssh_features: []
