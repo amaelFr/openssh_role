@@ -69,12 +69,14 @@ openssh_LoginGraceTime: 30
 # openssl_PermitUserEnvironment
 
 
-openssh_global:
+openssh_default_global:
 
-  features:
-    - X11Forwarding
-    - AgentForwarding
- 
+  # features: []
+  # TODO
+  #   - X11Forwarding
+  #   - AgentForwarding
+  #   - PasswordAuthentication
+
   # Include
  
  
@@ -158,18 +160,16 @@ openssh_global:
   # AllowGroups
 
 
-# openssh_Match:
+# openssh_match:
 #   - to_match
 #     - type: # User, Group, Host, Address
 #       value: array
 #     # all parameters from global
 
-# openssh_Match:
-#   - to_match:
+# openssh_match:
+#   - Match:
 #       - type: User
 #         value:
 #           - x1
 #           - g565534
 #     PermitRootLogin: true
-
-openssh_features: []

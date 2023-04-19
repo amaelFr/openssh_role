@@ -56,12 +56,8 @@
     {% endif -%}
 
     {% if openssh_sub_conf.SetEnv is defined -%}
-        SetEnv{% for SetEnv in openssh_sub_conf.SetEnv %} "{%
-        if SetEnv is mapping %}
-            {{ SetEnv.name }}={{ SetEnv.value }}
-        {% else %}
-            {{ SetEnv }}
-        {% endif %}"{% endfor %}
+        SetEnv{% for SetEnv in openssh_sub_conf.SetEnv %} "
+        {{ SetEnv.name }}={{ SetEnv.value }}"{% endfor %}
     {% endif -%}
 
     {% if openssh_sub_conf.AcceptEnv is defined -%}
@@ -73,7 +69,7 @@
     {% endif -%}
 
     {% if openssh_sub_conf.ChrootDirectory is defined -%}
-        VersionAddendum {{ oopenssh_sub_conf.ChrootDirectory if oopenssh_sub_conf.ChrootDirectory else 'none' }}
+        ChrootDirectory {{ openssh_sub_conf.ChrootDirectory if oopenssh_sub_conf.ChrootDirectory else 'none' }}
     {% endif -%}
 
     {% if openssh_sub_conf.RDomain is defined -%}
@@ -293,11 +289,11 @@
 
 {{ global_match_conf_gen(openssh_global) }}
 
-{%- if openssh_Match is defined %}
-    {% for match in openssh_Match %}
+{%- if openssh_match is defined %}
+    {% for match in openssh_match %}
 
 
-Match{% for to_match in match.to_match %} {{ to_match.type }} {{ to_match.value|join(',') }}{% endfor %}
+Match{% for Match in match.Match %} {{ Match.type }} {{ Match.value|join(',') }}{% endfor %}
 
     {{ global_match_conf_gen(match)|indent(4) -}}
     {% endfor %}

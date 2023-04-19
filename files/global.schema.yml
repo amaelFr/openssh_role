@@ -1,0 +1,153 @@
+---
+$schema: http://json-schema.org/draft-07/schema#
+$id: schemas/openssh_global
+description: openssh global configuration schema
+type: object
+# required:
+#   - 
+#   -
+properties:
+
+  features:
+    type: array
+    items: { type: string }
+
+  Include:
+    type: array
+    items: { type: string }
+
+####### Connection #######
+  LogLevel: { type: string }
+  RekeyLimit:
+    type: object
+    properties:
+      size:
+        type: string
+        match: "[0-9]+[KMG]"
+      time:
+        type: string
+        match: "[0-9]+[smh]"
+  IPQos:
+    type: string
+    match: ".*" # Todo
+  ClientAliveInterval: { type: number }
+  ClientAliveCountMax: { type: number }
+
+  Banner: { type: string }
+
+####### Session established #######
+  MaxSessions: { type: number }
+  
+  PermitTTY: { type: bool }
+  
+  PermitUserRC: { type: bool }
+  
+  ForceCommand: { type: string }
+  
+  SetEnv:
+    type: object
+    properties:
+      name: { type: string }
+      value:
+        type: [string, number]
+  
+  AcceptEnv:
+    type: array
+    items: { type: string }
+  
+  ChrootDirectory:
+    anyOf:
+    - type: string
+    - type: boolean
+      enum: [false]
+  RDomain: { type: string }
+
+#### Forwarding
+  DisableForwarding: { type: boolean }
+  GatewayPorts: { type: boolean }
+  AllowAgentForwarding: { type: boolean }
+  AllowStreamLocalForwarding: { type: boolean }
+  AllowTcpForwarding: { type: boolean }
+  PermitListen: 
+    anyOf:
+    - type: string
+    - type: boolean
+      enum: [false]
+  PermitOpen:
+    anyOf:
+    - type: string
+    - type: boolean
+      enum: [false]
+  PermitTunnel:
+    anyOf:
+    - type: string
+      enum: [ 'yes', 'no', point-to-point, ethernet]
+    - type: boolean
+  StreamLocalBindMask: { type: string }
+  StreamLocalBindUnlink: { type: boolean }
+
+  ###Remote desktop
+  X11Forwarding: { type: boolean }
+  X11DisplayOffset: { type: number }
+  X11UseLocalhost: { type: boolean }
+
+  #######Authentification ########
+  MaxAuthTries: { type: number }
+  PermitRootLogin: 
+    anyOf:
+    - type: string
+      enum: [ 'yes', 'no', prohibit-password, forced-commands-only]
+    - type: boolean
+  AuthenticationMethods:
+    anyOf:
+    - type: array
+      items:
+        type: string
+        match: "[^,]"
+    - type: object
+      items:
+        type: array
+        items:
+          type: string
+          match: "[^,]"
+  PubkeyAuthentication: { type: boolean }
+  PasswordAuthentication: { type: boolean }
+  KbdInteractiveAuthentication: { type: boolean }
+  PermitEmptyPasswords: { type: boolean }
+
+  ###AuthKey specific:
+  PubkeyAuthOptions:
+    anyOf:
+    - type: string
+      enum: [none, ouch-required, verify-required]
+    - type: boolean
+      enum: [false]
+
+  AuthorizedKeysFile:
+    anyOf:
+    - type: string
+    - type: boolean
+      enum: [false]
+  RevokedKeys:
+    anyOf:
+    - type: string
+    - type: boolean
+      enum: [false]
+  AuthorizedKeysCommand: { type: string }
+  AuthorizedKeysCommandUser: { type: string }
+
+  ###Auth certificate specific
+  AuthorizedPrincipalsFile:
+    anyOf:
+    - type: string
+    - type: boolean
+      enum: [false]
+  CASignatureAlgorithms: { type: string }
+  TrustedUserCAKeys:
+    anyOf:
+    - type: array
+      items: { type: string }
+    - type: boolean
+      enum: [false]
+  AuthorizedPrincipalsCommand: { type: string }
+  AuthorizedPrincipalsCommandUser: { type: string }

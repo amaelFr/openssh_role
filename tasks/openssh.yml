@@ -1,14 +1,39 @@
 ---
 ##### To apply to match and global
-- name: X11 Forwarding
-  when: "'X11' in openssh_features or 'X11Forwarding' in openssh_features"
-  set_fact:
-    openssh_global: "{{ openssh_global| combine({ 'DisableForwarding': false, 'X11Forwarding': true }) }}"
 
-- name: Agent Forwarding
-  when: "'Agent' in openssh_features in openssh_features or 'AgentForwarding' in openssh_features"
+- name: Validate openssh global variables
+  ansible.utils.validate:
+    data: "{{ item }}"
+    criteria:
+      - "{{ lookup('file',  (role_path,'files/global.schema.yml')|path_join) | from_yaml }}"
+    engine: ansible.utils.jsonschema
+  with_items:
+    - "{{ openssh_default_global }}"
+    - "{{ openssh_global|d({}) }}"
+
+- name: Validate openssh global match
+  ansible.utils.validate:
+    data: "{{ item }}"
+    criteria:
+      - "{{ lookup('file',  (role_path,'files/global.schema.yml')|path_join) | from_yaml }}"
+    engine: ansible.utils.jsonschema
+  with_items: "{{ openssh_match|d([]) }}"
+
+- name: Prepare_global
   set_fact:
-    openssh_global: "{{ openssh_global| combine({ 'DisableForwarding': false, 'AllowAgentForwarding': true }) }}"
+    openssh_global_override: "{{ openssh_default_global|combine(openssh_global|d({})) }}"
+
+
+
+# - name: X11 Forwarding
+#   when: "'X11' in features or 'X11Forwarding' in features"
+#   set_fact:
+#     openssh_global: "{{ openssh_global| combine({ 'DisableForwarding': false, 'X11Forwarding': true }) }}"
+
+# - name: Agent Forwarding
+#   when: "'Agent' in features in features or 'AgentForwarding' in features"
+#   set_fact:
+#     openssh_global: "{{ openssh_global| combine({ 'DisableForwarding': false, 'AllowAgentForwarding': true }) }}"
 
 
 - name: Configure openssh
@@ -26,3 +51,5 @@
     lstrip_blocks: yes
   notify:
     - Restart sshd
+  vars:
+    openssh_global: "{{ openssh_global_override }}"
